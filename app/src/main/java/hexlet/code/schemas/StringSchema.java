@@ -21,18 +21,21 @@ public class StringSchema {
     }
 
     public boolean isValid(String inputString) {
-        if (isRequired) {
-            if (inputString == null || inputString.isEmpty()) {
-                return false;
-            }
-        }
-        if (isContains && !inputString.contains(contString)) {
-            return false;
-        }
-        return  true;
+        return isRequiredValid(inputString) && isContainsValid(inputString);
     }
 
-    public boolean isValid(Object inputString) {
+    public boolean isValid(Object ignoredInputString) {
         return false;
+    }
+
+    private boolean isRequiredValid(String inputString) {
+        if (isRequired) {
+            return inputString != null && !inputString.isEmpty();
+        }
+        return true;
+    }
+
+    private boolean isContainsValid(String inputString) {
+        return !isContains || inputString.contains(contString);
     }
 }
