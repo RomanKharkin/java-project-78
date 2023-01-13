@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class StringSchemaTest {
 
     @Test
-    void isValid() {
+    void stringIsValid() {
         StringSchema schema = new StringSchema();
 
         assertTrue(schema.isValid("")); // true
@@ -20,8 +20,10 @@ class StringSchemaTest {
         assertTrue(schema.isValid("what does the fox say")); // true
         assertTrue(schema.isValid("hexlet")); // true
         assertFalse(schema.isValid(null)); // false
-        assertFalse(schema.isValid(5)); // false
-        assertFalse(schema.isValid("")); // false
+        assertFalse(schema.isValid(8)); // false
+        schema.minLength(5);
+        assertFalse(schema.isValid("vor")); // false
+        assertTrue(schema.isValid("hexlet")); // true
 
         assertTrue(schema.contains("wh").isValid("what does the fox say")); // true
         assertTrue(schema.contains("what").isValid("what does the fox say")); // true
@@ -30,3 +32,5 @@ class StringSchemaTest {
         assertFalse(schema.isValid("what does the fox say")); // false
     }
 }
+
+

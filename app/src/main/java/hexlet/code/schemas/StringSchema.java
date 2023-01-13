@@ -1,38 +1,74 @@
 package hexlet.code.schemas;
 
-public class StringSchema {
+import hexlet.code.tests.Test;
 
-    private boolean isRequired = false;
-    private boolean isContains = false;
+import java.util.function.Predicate;
+
+public class StringSchema extends BaseSchema {
+
     private String contString;
-
-    public StringSchema() {
-    }
+    private int minLength;
 
     public StringSchema required() {
-        isRequired = true;
+        tests.add(requiredTest());
         return this;
     }
+
+    public StringSchema minLength(int length) {
+        this.minLength = length;
+        tests.add(minLengthTest());
+        return this;
+    }
+
+
 
     public StringSchema contains(String subString) {
-        isContains = true;
         this.contString = subString;
+        tests.add(containsTest());
         return this;
     }
 
-    public boolean isValid(String inputString) {
-        if (isRequired) {
-            if (inputString == null || inputString.isEmpty()) {
-                return false;
+    private Test requiredTest() {
+        return new Test() {
+            @Override
+            public String getName() {
+                return "required";
             }
-        }
-        if (isContains && !inputString.contains(contString)) {
-            return false;
-        }
-        return  true;
+
+            @Override
+            public Predicate getTestFn() {
+                return (Object value) -> value instanceof String && !((String) value).isEmpty();
+            }
+        };
     }
 
-    public boolean isValid(Object inputString) {
-        return false;
+    private Test minLengthTest() {
+        return new Test() {
+            @Override
+            public String getName() {
+                return "minLength";
+            }
+
+            @Override
+            public Predicate getTestFn() {
+                return (Object value) -> (value != null) && (value instanceof String) && (((String) value).length()
+                                                                                                  >= minLength);
+            }
+        };
+    }
+
+    private Test containsTest() {
+        return new Test() {
+            @Override
+            public String getName() {
+                return "contains";
+            }
+
+            @Override
+            public Predicate getTestFn() {
+                return (Object value) -> (value != null) && (value instanceof String)
+                                                 && ((String) value).contains(contString);
+            }
+        };
     }
 }
