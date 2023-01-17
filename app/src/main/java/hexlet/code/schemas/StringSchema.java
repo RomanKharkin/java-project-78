@@ -28,6 +28,7 @@ public class StringSchema extends BaseSchema {
         return this;
     }
 
+<<<<<<< HEAD
     private Test requiredTest() {
         return new Test() {
             @Override
@@ -70,5 +71,24 @@ public class StringSchema extends BaseSchema {
                                                  && ((String) value).contains(contString);
             }
         };
+=======
+    public boolean isValid(String inputString) {
+        return isRequiredValid(inputString) && isContainsValid(inputString);
+    }
+
+    public boolean isValid(Object ignoredInputString) {
+        return false;
+>>>>>>> origin/main
+    }
+
+    private boolean isRequiredValid(String inputString) {
+        if (isRequired) {
+            return inputString != null && !inputString.isEmpty();
+        }
+        return true;
+    }
+
+    private boolean isContainsValid(String inputString) {
+        return !isContains || inputString.contains(contString);
     }
 }
