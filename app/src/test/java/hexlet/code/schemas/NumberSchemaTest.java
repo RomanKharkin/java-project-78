@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class NumberSchemaTest {
 
     @Test
-    void NumberIsValid() {
+    void numberIsValid() {
 
         NumberSchema schema = new NumberSchema();
 
