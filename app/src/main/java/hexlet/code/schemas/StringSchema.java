@@ -7,28 +7,26 @@ import java.util.function.Predicate;
 public class StringSchema extends BaseSchema {
 
     private String contString;
-    private int minLength;
+
+    private Integer minLength;
 
     public StringSchema required() {
         tests.add(requiredTest());
         return this;
     }
 
-    public StringSchema minLength(int length) {
+    public StringSchema minLength(Integer length) {
         this.minLength = length;
         tests.add(minLengthTest());
         return this;
     }
 
-
-
-    public StringSchema contains(String subString) {
-        this.contString = subString;
-        tests.add(containsTest());
+    public StringSchema contains(String cString) {
+        this.contString = cString;
+        tests.add(containsdTest());
         return this;
     }
 
-<<<<<<< HEAD
     private Test requiredTest() {
         return new Test() {
             @Override
@@ -38,7 +36,7 @@ public class StringSchema extends BaseSchema {
 
             @Override
             public Predicate getTestFn() {
-                return (Object value) -> value instanceof String && !((String) value).isEmpty();
+                return (Object value) -> value instanceof String && ((String) value).length() > 0;
             }
         };
     }
@@ -52,43 +50,23 @@ public class StringSchema extends BaseSchema {
 
             @Override
             public Predicate getTestFn() {
-                return (Object value) -> (value != null) && (value instanceof String) && (((String) value).length()
-                                                                                                  >= minLength);
+                return (Object value) -> value instanceof String && ((String) value).length() >= minLength;
             }
         };
     }
 
-    private Test containsTest() {
+    private Test containsdTest() {
         return new Test() {
             @Override
             public String getName() {
-                return "contains";
+                return "minLength";
             }
 
             @Override
             public Predicate getTestFn() {
-                return (Object value) -> (value != null) && (value instanceof String)
-                                                 && ((String) value).contains(contString);
+                return (Object value) -> value instanceof String && ((String) value).contains(contString);
             }
         };
-=======
-    public boolean isValid(String inputString) {
-        return isRequiredValid(inputString) && isContainsValid(inputString);
     }
 
-    public boolean isValid(Object ignoredInputString) {
-        return false;
->>>>>>> origin/main
-    }
-
-    private boolean isRequiredValid(String inputString) {
-        if (isRequired) {
-            return inputString != null && !inputString.isEmpty();
-        }
-        return true;
-    }
-
-    private boolean isContainsValid(String inputString) {
-        return !isContains || inputString.contains(contString);
-    }
 }
