@@ -1,5 +1,6 @@
 package hexlet.code.schemas;
 
+import hexlet.code.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -9,7 +10,9 @@ class StringSchemaTest {
 
     @Test
     void stringIsValid() {
-        StringSchema schema = new StringSchema();
+
+        Validator v = new Validator();
+        StringSchema schema = v.string();
 
         assertTrue(schema.isValid("")); // true
 // Пока на вызван метод required(), null считается валидным
@@ -22,6 +25,7 @@ class StringSchemaTest {
         assertFalse(schema.isValid(null)); // false
         assertFalse(schema.isValid(8)); // false
         schema.minLength(5);
+
         assertFalse(schema.isValid("vor")); // false
         assertTrue(schema.isValid("hexlet")); // true
 

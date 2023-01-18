@@ -10,6 +10,7 @@ public class NumberSchema extends BaseSchema {
     private int limitTop;
 
     public NumberSchema required() {
+        super.required();
         tests.add(requiredTest());
         return this;
     }

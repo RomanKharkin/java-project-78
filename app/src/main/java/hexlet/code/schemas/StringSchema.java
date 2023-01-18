@@ -11,6 +11,7 @@ public class StringSchema extends BaseSchema {
     private Integer minLength;
 
     public StringSchema required() {
+        super.required();
         tests.add(requiredTest());
         return this;
     }

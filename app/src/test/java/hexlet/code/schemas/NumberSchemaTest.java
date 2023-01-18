@@ -1,5 +1,6 @@
 package hexlet.code.schemas;
 
+import hexlet.code.Validator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,7 +11,8 @@ class NumberSchemaTest {
     @Test
     void numberIsValid() {
 
-        NumberSchema schema = new NumberSchema();
+        Validator v = new Validator();
+        NumberSchema schema = v.number();
 
 // Пока не вызван метод required(), null считается валидным
         assertTrue(schema.isValid("7")); // true
