@@ -4,13 +4,12 @@ import hexlet.code.tests.Test;
 
 import java.util.function.Predicate;
 
-public class NumberSchema extends BaseSchema {
+public final class NumberSchema extends BaseSchema {
 
     private int limitBottom;
     private int limitTop;
 
     public NumberSchema required() {
-        super.required();
         tests.add(requiredTest());
         return this;
     }

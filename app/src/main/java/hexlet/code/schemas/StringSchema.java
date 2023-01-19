@@ -4,14 +4,13 @@ import hexlet.code.tests.Test;
 
 import java.util.function.Predicate;
 
-public class StringSchema extends BaseSchema {
+public final class StringSchema extends BaseSchema {
 
     private String contString;
 
     private Integer minLength;
 
     public StringSchema required() {
-        super.required();
         tests.add(requiredTest());
         return this;
     }

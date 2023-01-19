@@ -5,13 +5,12 @@ import hexlet.code.tests.Test;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class MapSchema extends BaseSchema {
+public final class MapSchema extends BaseSchema {
 
     private Integer sizeof;
     private Map<String, BaseSchema> shape;
 
     public MapSchema required() {
-        super.required();
         tests.add(requiredTest());
         return this;
     }
