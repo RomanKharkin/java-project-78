@@ -23,7 +23,7 @@ public final class StringSchema extends BaseSchema {
 
     public StringSchema contains(String cString) {
         this.contString = cString;
-        tests.add(containsdTest());
+        tests.add(containsTest());
         return this;
     }
 
@@ -55,11 +55,11 @@ public final class StringSchema extends BaseSchema {
         };
     }
 
-    private Test containsdTest() {
+    private Test containsTest() {
         return new Test() {
             @Override
             public String getName() {
-                return "minLength";
+                return "contains";
             }
 
             @Override
@@ -68,5 +68,4 @@ public final class StringSchema extends BaseSchema {
             }
         };
     }
-
 }
