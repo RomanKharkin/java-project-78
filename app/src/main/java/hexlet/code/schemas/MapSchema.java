@@ -8,6 +8,7 @@ import java.util.function.Predicate;
 public class MapSchema extends BaseSchema {
 
     private Integer sizeof;
+    private Map<String, BaseSchema> shape;
 
     public MapSchema required() {
         super.required();
@@ -19,6 +20,32 @@ public class MapSchema extends BaseSchema {
         this.sizeof = length;
         tests.add(sizeofTest());
         return this;
+    }
+
+    public MapSchema shape(Map inputShape) {
+        this.shape = inputShape;
+        tests.add(shapeTest());
+        return this;
+    }
+
+    private Test shapeTest() {
+        return new Test() {
+            @Override
+            public String getName() {
+                return "shapeTest";
+            }
+
+            @Override
+            public Predicate getTestFn() {
+                return (Object value) -> {
+                    return value instanceof Map && shape.keySet().stream()
+                                                           .map((key) -> {
+                                                               return shape.get(key).isValid(((Map) value).get(key));
+                                                           })
+                                                           .allMatch((isValid) -> isValid);
+                };
+            }
+        };
     }
 
     private Test requiredTest() {
@@ -49,4 +76,3 @@ public class MapSchema extends BaseSchema {
         };
     }
 }
-

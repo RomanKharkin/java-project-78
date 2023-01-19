@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 public abstract class BaseSchema {
 
-    protected List<Test> tests = new ArrayList();
+    protected final List<Test> tests = new ArrayList();
 
-    private List<Test> internalTests = new ArrayList();
+    private final List<Test> internalTests = new ArrayList();
 
     public boolean isValid(Object value) {
         return Stream.concat(internalTests.stream(), tests.stream()).allMatch((test) -> test.getTestFn().test(value));
