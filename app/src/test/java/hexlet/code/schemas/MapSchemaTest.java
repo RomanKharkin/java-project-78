@@ -2,6 +2,7 @@ package hexlet.code.schemas;
 
 import hexlet.code.Validator;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -74,5 +75,23 @@ class MapSchemaTest {
         human4.put("name", "Valya");
         human4.put("age", -5);
         assertFalse(schema.isValid(human4)); // false
+    }
+
+    @Test
+    @DisplayName("Проверка валидатора sizeof")
+    void sizeofTest() {
+        MapSchema schema = v.map();
+        schema.sizeof(2);
+
+        assertTrue(schema.isValid(null));
+
+        assertFalse(schema.isValid("notMap"));
+
+        Map<String, String> data = new HashMap<>();
+        data.put("key1", "value1");
+        assertFalse(schema.isValid(data));  // false
+
+        data.put("key2", "value2");
+        assertTrue(schema.isValid(data)); // true
     }
 }

@@ -1,71 +1,21 @@
 package hexlet.code.schemas;
 
-import hexlet.code.tests.Test;
-
-import java.util.function.Predicate;
+import java.util.Objects;
 
 public final class StringSchema extends BaseSchema {
 
-    private String contString;
-
-    private Integer minLength;
-
     public StringSchema required() {
-        tests.add(requiredTest());
+        addTest(value -> value instanceof String && ((String) value).length() > 0);
         return this;
     }
 
-    public StringSchema minLength(Integer length) {
-        this.minLength = length;
-        tests.add(minLengthTest());
+    public StringSchema minLength(Integer minLength) {
+        addTest(value -> Objects.isNull(value)  || value instanceof String && ((String) value).length() >= minLength);
         return this;
     }
 
-    public StringSchema contains(String cString) {
-        this.contString = cString;
-        tests.add(containsTest());
+    public StringSchema contains(String contString) {
+        addTest(value ->  Objects.isNull(value) || value instanceof String && ((String) value).contains(contString));
         return this;
-    }
-
-    private Test requiredTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "required";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof String && ((String) value).length() > 0;
-            }
-        };
-    }
-
-    private Test minLengthTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "minLength";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof String && ((String) value).length() >= minLength;
-            }
-        };
-    }
-
-    private Test containsTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "contains";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof String && ((String) value).contains(contString);
-            }
-        };
     }
 }

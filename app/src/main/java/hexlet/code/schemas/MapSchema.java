@@ -1,77 +1,28 @@
 package hexlet.code.schemas;
 
-import hexlet.code.tests.Test;
-
 import java.util.Map;
-import java.util.function.Predicate;
+import java.util.Objects;
 
 public final class MapSchema extends BaseSchema {
 
-    private Integer sizeof;
-    private Map<String, BaseSchema> shape;
-
     public MapSchema required() {
-        tests.add(requiredTest());
+        addTest(value -> value instanceof Map);
         return this;
     }
 
-    public MapSchema sizeof(Integer length) {
-        this.sizeof = length;
-        tests.add(sizeofTest());
+    public MapSchema sizeof(Integer sizeof) {
+        addTest(value -> Objects.isNull(value) || value instanceof Map && ((Map) value).size() == sizeof);
         return this;
     }
 
-    public MapSchema shape(Map inputShape) {
-        this.shape = inputShape;
-        tests.add(shapeTest());
+    public MapSchema shape(Map<String, BaseSchema> shape) {
+        addTest(value -> {
+            return Objects.isNull(value) || value instanceof Map && shape.keySet().stream()
+                                                   .map((key) -> {
+                                                       return shape.get(key).isValid(((Map) value).get(key));
+                                                   })
+                                                   .allMatch((isValid) -> isValid);
+        });
         return this;
-    }
-
-    private Test shapeTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "shapeTest";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> {
-                    return value instanceof Map && shape.keySet().stream()
-                                                           .map((key) -> {
-                                                               return shape.get(key).isValid(((Map) value).get(key));
-                                                           })
-                                                           .allMatch((isValid) -> isValid);
-                };
-            }
-        };
-    }
-
-    private Test requiredTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "required";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof Map;
-            }
-        };
-    }
-
-    private Test sizeofTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "sizeof";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof Map && ((Map) value).size() == sizeof;
-            }
-        };
     }
 }

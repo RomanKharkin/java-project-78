@@ -1,73 +1,23 @@
 package hexlet.code.schemas;
 
-import hexlet.code.tests.Test;
 
-import java.util.function.Predicate;
+import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
 
-    private int limitBottom;
-    private int limitTop;
-
     public NumberSchema required() {
-        tests.add(requiredTest());
+        addTest(value -> value instanceof Integer);
         return this;
     }
 
     public NumberSchema positive() {
-        tests.add(positiveTest());
+        addTest(value -> Objects.isNull(value) || (value instanceof Integer && ((Integer) value) > 0));
         return this;
     }
 
-    public NumberSchema range(int limBottom, int limTop) {
-        tests.add(rangeTest());
-        this.limitBottom = limBottom;
-        this.limitTop = limTop;
+    public NumberSchema range(int limitBottom, int limitTop) {
+        addTest(value -> Objects.isNull(value) || value instanceof Integer && ((Integer) value <= limitTop) && (
+                        (Integer) value) >= limitBottom);
         return this;
-    }
-
-    private Test requiredTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "required";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value instanceof Integer;
-            }
-        };
-    }
-
-    private Test positiveTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "positive";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> value == null || (value instanceof Integer && ((Integer) value) > 0);
-            }
-        };
-    }
-
-    private Test rangeTest() {
-        return new Test() {
-            @Override
-            public String getName() {
-                return "range";
-            }
-
-            @Override
-            public Predicate getTestFn() {
-                return (Object value) -> (value != null) && (value instanceof Integer) && (((Integer) value)
-                                                                                                   <= limitTop) && (
-                        ((Integer) value) >= limitBottom);
-            }
-        };
     }
 }
-
