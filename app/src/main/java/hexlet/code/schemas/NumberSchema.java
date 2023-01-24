@@ -1,6 +1,5 @@
 package hexlet.code.schemas;
 
-
 import java.util.Objects;
 
 public final class NumberSchema extends BaseSchema {
@@ -15,9 +14,8 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-    public NumberSchema range(int limitBottom, int limitTop) {
-        addTest(value -> Objects.isNull(value) || value instanceof Integer && ((Integer) value <= limitTop) && (
-                        (Integer) value) >= limitBottom);
+    public NumberSchema range(int min, int max) {
+        addTest(value -> ((Integer) value <= max) && ((Integer) value) >= min);
         return this;
     }
 }

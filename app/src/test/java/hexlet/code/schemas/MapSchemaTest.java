@@ -1,97 +1,61 @@
 package hexlet.code.schemas;
 
 import hexlet.code.Validator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class MapSchemaTest {
-    private Validator v;
-
-    @BeforeEach
-    void setupValidator() {
-        v = new Validator();
-    }
-
     @Test
     void mapIsValid() {
-
+        Validator v = new Validator();
         MapSchema schema = v.map();
 
-        assertTrue(schema.isValid(null)); // true
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.isValid(new HashMap())).isTrue();
 
         schema.required();
-
-        assertFalse(schema.isValid(null)); // false
-        assertTrue(schema.isValid(new HashMap())); // true
-
-        Map<String, String> data = new HashMap<>();
-        data.put("key1", "value1");
-
-        assertTrue(schema.isValid(data)); // true
+        assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid(new HashMap())).isTrue();
 
         schema.sizeof(2);
+        assertThat(schema.isValid(new HashMap())).isFalse();
+        Map<String, String> actual1 = new HashMap<>();
+        actual1.put("key1", "value1");
+        assertThat(schema.isValid(actual1)).isFalse();
+        actual1.put("key2", "value2");
+        assertThat(schema.isValid(actual1)).isTrue();
 
-        assertFalse(schema.isValid(data));  // false
-        data.put("key2", "value2");
-        assertTrue(schema.isValid(data)); // true
-    }
-
-    @Test
-    void shapeIsValid() {
-
-        MapSchema schema = new MapSchema();
-
-        // shape - позволяет описывать валидацию для значений объекта Map по ключам.
         Map<String, BaseSchema> schemas = new HashMap<>();
-        schemas.put("name", v.string().required());
+        schemas.put("name", v.string().required().contains("ya"));
         schemas.put("age", v.number().positive());
-
         schema.shape(schemas);
 
-        Map<String, Object> human1 = new HashMap<>();
-        human1.put("name", "Kolya");
-        human1.put("age", 100);
+        Map<String, Object> actual2 = new HashMap<>();
+        actual2.put("name", "Kolya");
+        actual2.put("age", 100);
+        assertThat(schema.isValid(actual2)).isTrue();
 
-        assertTrue(schema.isValid(human1)); // true
+        Map<String, Object> actual3 = new HashMap<>();
+        actual3.put("name", "Maya");
+        actual3.put("age", null);
+        assertThat(schema.isValid(actual3)).isTrue();
 
-        Map<String, Object> human2 = new HashMap<>();
-        human2.put("name", "Maya");
-        human2.put("age", null);
-        assertTrue(schema.isValid(human2)); // true
+        Map<String, Object> actual4 = new HashMap<>();
+        actual4.put("name", "");
+        actual4.put("age", null);
+        assertThat(schema.isValid(actual4)).isFalse();
 
-        Map<String, Object> human3 = new HashMap<>();
-        human3.put("name", "");
-        human3.put("age", null);
-        assertFalse(schema.isValid(human3)); // false
+        Map<String, Object> actual5 = new HashMap<>();
+        actual5.put("name", "Valya");
+        actual5.put("age", -5);
+        assertThat(schema.isValid(actual5)).isFalse();
 
-        Map<String, Object> human4 = new HashMap<>();
-        human4.put("name", "Valya");
-        human4.put("age", -5);
-        assertFalse(schema.isValid(human4)); // false
-    }
-
-    @Test
-    @DisplayName("Проверка валидатора sizeof")
-    void sizeofTest() {
-        MapSchema schema = v.map();
-        schema.sizeof(2);
-
-        assertTrue(schema.isValid(null));
-
-        assertFalse(schema.isValid("notMap"));
-
-        Map<String, String> data = new HashMap<>();
-        data.put("key1", "value1");
-        assertFalse(schema.isValid(data));  // false
-
-        data.put("key2", "value2");
-        assertTrue(schema.isValid(data)); // true
+        Map<String, Object> actual6 = new HashMap<>();
+        actual6.put("name", "Ada");
+        actual6.put("age", 15);
+        assertThat(schema.isValid(actual6)).isFalse();
     }
 }

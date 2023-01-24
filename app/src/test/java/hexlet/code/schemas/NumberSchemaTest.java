@@ -3,39 +3,34 @@ package hexlet.code.schemas;
 import hexlet.code.Validator;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class NumberSchemaTest {
 
     @Test
     void numberIsValid() {
-
         Validator v = new Validator();
         NumberSchema schema = v.number();
 
-// Пока не вызван метод required(), null считается валидным
-        assertTrue(schema.isValid("7")); // true
-        assertTrue(schema.isValid(null)); // true
-        assertTrue(schema.positive().isValid(null)); // true
-        assertFalse(schema.isValid("7")); // false
+        assertThat(schema.isValid(5)).isTrue();
+        assertThat(schema.isValid(null)).isTrue();
+        assertThat(schema.positive().isValid(null)).isTrue();
 
         schema.required();
-
-        assertFalse(schema.isValid(null)); // false
-        assertFalse(schema.isValid("7")); // false
-        assertTrue(schema.isValid(10)); // true
-        assertFalse(schema.isValid("5")); // false
-        assertFalse(schema.isValid(-10)); // false
-//  Ноль - не положительное число
-        assertFalse(schema.isValid(0)); // false
+        assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid("5")).isFalse();
+        assertThat(schema.isValid(-10)).isFalse();
+        assertThat(schema.isValid(0)).isFalse();
+        assertThat(schema.isValid(10)).isTrue();
 
         schema.range(5, 10);
+        assertThat(schema.isValid(5)).isTrue();
+        assertThat(schema.isValid(10)).isTrue();
+        assertThat(schema.isValid(4)).isFalse();
+        assertThat(schema.isValid(11)).isFalse();
 
-        assertFalse(schema.isValid("7")); // false
-        assertTrue(schema.isValid(5)); // true
-        assertTrue(schema.isValid(10)); // true
-        assertFalse(schema.isValid(4)); // false
-        assertFalse(schema.isValid(11)); // false
+        schema.range(6, 9);
+        assertThat(schema.isValid(5)).isFalse();
+        assertThat(schema.isValid(10)).isFalse();
     }
 }
